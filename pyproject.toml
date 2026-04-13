@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,6 +7,8 @@ name = "api-client"
 version = "0.2.0"
 requires-python = ">=3.14"
 dependencies = ["requests"]
+license = "MIT"
+license-files = ["LICENSE"]
 
 [tool.ruff]
 line-length = 88

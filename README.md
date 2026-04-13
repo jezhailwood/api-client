@@ -42,3 +42,7 @@ Full documentation is available via Python's built-in help:
 from api_client import APIClient
 help(APIClient)
 ```
+
+## Licence
+
+Released under the [MIT Licence](LICENSE).
