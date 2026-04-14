@@ -36,12 +36,7 @@ user = client.get("users", 123, params={"profile": "full"})
 
 ## API reference
 
-Full documentation is available via Python's built-in help:
-
-```python
-from api_client import APIClient
-help(APIClient)
-```
+Full documentation is available at [jezhailwood.github.io/api-client](https://jezhailwood.github.io/api-client).
 
 ## Licence
 

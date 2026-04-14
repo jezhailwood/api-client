@@ -22,30 +22,35 @@ class APIClient:
     errors and non-2xx responses are raised by `requests`.
 
     Examples:
-        # Basic usage:
-        client = APIClient("https://api.example.com")
-        data = client.get("users", 123, params={"profile": "full"})
+        Basic usage:
 
-        # Bearer token:
-        session = requests.Session()
-        session.headers["Authorization"] = "Bearer <token>"
-        client = APIClient("https://api.example.com", session=session)
+            client = APIClient("https://api.example.com")
+            data = client.get("users", 123, params={"profile": "full"})
 
-        # Header key:
-        session = requests.Session()
-        session.headers["X-API-Key"] = "<key>"
-        client = APIClient("https://api.example.com", session=session)
+        Bearer token:
 
-        # Query parameter key:
-        session = requests.Session()
-        session.params = {"api_key": "<key>"}
-        client = APIClient("https://api.example.com", session=session)
+            session = requests.Session()
+            session.headers["Authorization"] = "Bearer <token>"
+            client = APIClient("https://api.example.com", session=session)
 
-        # OAuth 2.0 with automatic token refresh (requires `authlib`):
-        from authlib.integrations.requests_client import OAuth2Session
-        session = OAuth2Session("<client_id>", "<client_secret>")
-        session.fetch_token("https://api.example.com/oauth/token")
-        client = APIClient("https://api.example.com", session=session)
+        Header key:
+
+            session = requests.Session()
+            session.headers["X-API-Key"] = "<key>"
+            client = APIClient("https://api.example.com", session=session)
+
+        Query parameter key:
+
+            session = requests.Session()
+            session.params = {"api_key": "<key>"}
+            client = APIClient("https://api.example.com", session=session)
+
+        OAuth 2.0 with automatic token refresh (requires `authlib`):
+
+            from authlib.integrations.requests_client import OAuth2Session
+            session = OAuth2Session("<client_id>", "<client_secret>")
+            session.fetch_token("https://api.example.com/oauth/token")
+            client = APIClient("https://api.example.com", session=session)
     """
 
     def __init__(
