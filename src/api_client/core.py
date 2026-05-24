@@ -2,10 +2,9 @@
 
 This module provides `APIClient`, a helper for constructing URLs relative to a base API
 endpoint and making HTTP GET requests using the `requests` library. Responses are
-returned as parsed JSON.
+returned as `requests.Response` objects.
 """
 
-from typing import Any
 from urllib.parse import urljoin
 
 import requests
@@ -14,8 +13,8 @@ import requests
 class APIClient:
     """HTTP client for simple GET requests against a REST API.
 
-    The client constructs request URLs relative to a configured base URL, performs GET
-    requests, and returns parsed JSON responses.
+    The client constructs request URLs relative to a configured base URL and performs
+    GET requests, returning `requests.Response` objects for the caller to handle.
 
     This client does not currently handle retries. Authentication and custom headers can
     be configured by passing a pre-configured `requests.Session` instance. Network
@@ -25,7 +24,8 @@ class APIClient:
         Basic usage:
 
             client = APIClient("https://api.example.com")
-            data = client.get("users", 123, params={"profile": "full"})
+            response = client.get("users", 123, params={"profile": "full"})
+            data = response.json()
 
         Bearer token:
 
@@ -83,8 +83,8 @@ class APIClient:
         *path_segments: str | int,
         params: dict[str, str | int] | None = None,
         timeout: float | None = None,
-    ) -> Any:
-        """Make a GET request and return the parsed JSON response.
+    ) -> requests.Response:
+        """Make a GET request and return the response.
 
         The request URL is formed by joining `base_url` with `path_segments`.
         Each segment is converted to a string and stripped of leading and trailing
@@ -98,16 +98,16 @@ class APIClient:
                 default timeout is used.
 
         Returns:
-            Parsed JSON from the response body.
+            A `requests.Response` object. Call `.json()`, `.text` or `.content` to
+            access the response body.
 
         Raises:
             requests.HTTPError: If the response status code indicates an error.
             requests.RequestException: If a network-level error occurs.
-            ValueError: If the response body is not valid JSON.
         """
         path = "/".join(str(p).strip("/") for p in path_segments)
         url = urljoin(self.base_url, path)
         effective_timeout = self.timeout if timeout is None else timeout
         response = self._session.get(url, params=params, timeout=effective_timeout)
         response.raise_for_status()
-        return response.json()
+        return response
