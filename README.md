@@ -6,7 +6,7 @@ A lightweight Python library for making HTTP GET requests against REST APIs. It 
 
 Install from GitHub using pip:
 
-```bash
+```shell
 pip install "api-client @ git+https://github.com/jezhailwood/api-client.git@v0.2.0"
 ```
 
