@@ -1,24 +1,24 @@
 # api-client
 
-A lightweight Python library for making HTTP GET requests against REST APIs. It provides a class that constructs URLs relative to a base endpoint, handles query parameters and returns `requests.Response` objects. Authentication and other session-level behaviour can be configured at construction time.
+A lightweight Python library for making HTTP requests against REST APIs. It provides a class that constructs URLs relative to a base endpoint, handles query parameters and returns `requests.Response` objects. Authentication and other session-level behaviour can be configured at construction time.
 
 ## Installation
 
 Install from GitHub using pip:
 
 ```shell
-pip install "api-client @ git+https://github.com/jezhailwood/api-client.git@v0.2.0"
+pip install "api-client @ git+https://github.com/jezhailwood/api-client.git@v0.4.0"
 ```
 
 Alternatively, add as a dependency in `pyproject.toml`:
 
 ```toml
 dependencies = [
-    "api-client @ git+https://github.com/jezhailwood/api-client.git@v0.2.0",
+    "api-client @ git+https://github.com/jezhailwood/api-client.git@v0.4.0",
 ]
 ```
 
-Replace `v0.2.0` with the [latest release tag](https://github.com/jezhailwood/api-client/tags).
+Replace `v0.4.0` with the [latest release tag](https://github.com/jezhailwood/api-client/tags).
 
 ## Quickstart
 

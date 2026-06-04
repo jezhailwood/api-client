@@ -1,4 +1,4 @@
-"""A lightweight Python library for making HTTP GET requests against REST APIs.
+"""A lightweight Python library for making HTTP requests against REST APIs.
 
 It provides a class that constructs URLs relative to a base endpoint, handles query
 parameters and returns `requests.Response` objects. Authentication and other
@@ -8,3 +8,6 @@ See `api_client.core` for full usage details.
 """
 
 from .core import APIClient
+from .exceptions import APIError
+
+__all__ = ["APIClient", "APIError"]
