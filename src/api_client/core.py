@@ -5,7 +5,7 @@ endpoint and making HTTP GET requests using the `requests` library. Responses ar
 returned as `requests.Response` objects.
 """
 
-from urllib.parse import urljoin
+from urllib.parse import quote
 
 import requests
 
@@ -88,9 +88,9 @@ class APIClient:
     ) -> requests.Response:
         """Make a GET request and return the response.
 
-        The request URL is formed by joining `base_url` with `path_segments`.
-        Each segment is converted to a string and stripped of leading and trailing
-        slashes. If provided, `params` are included as query string parameters.
+        The request URL is formed by joining `base_url` with `path_segments`. Each
+        segment is converted to a string, stripped of leading and trailing slashes and
+        percent-encoded. If provided, `params` are included as query string parameters.
 
         Args:
             *path_segments: Path segments to append to the base URL,
@@ -107,8 +107,8 @@ class APIClient:
             requests.HTTPError: If the response status code indicates an error.
             requests.RequestException: If a network-level error occurs.
         """
-        path = "/".join(str(p).strip("/") for p in path_segments)
-        url = urljoin(self.base_url, path)
+        path = "/".join(quote(str(p).strip("/"), safe="") for p in path_segments)
+        url = self.base_url + path
         effective_timeout = self.timeout if timeout is None else timeout
         response = self._session.get(url, params=params, timeout=effective_timeout)
         response.raise_for_status()
