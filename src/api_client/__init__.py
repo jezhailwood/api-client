@@ -4,10 +4,10 @@ It provides a class that constructs URLs relative to a base endpoint, handles qu
 parameters and returns `requests.Response` objects. Authentication and other
 session-level behaviour can be configured at construction time.
 
-See `api_client.core` for full usage details.
+See `api_client.client` for full usage details.
 """
 
-from .core import APIClient
+from .client import APIClient
 from .exceptions import APIError
 
 __all__ = ["APIClient", "APIError"]
