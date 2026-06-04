@@ -5,10 +5,20 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "api-client"
 version = "0.4.0"
+description = "A lightweight Python library for making HTTP requests against REST APIs."
+readme = "README.md"
 requires-python = ">=3.14"
-dependencies = ["requests"]
 license = "MIT"
 license-files = ["LICENSE"]
+authors = [
+    { name = "Jez Hailwood" },
+]
+dependencies = ["requests"]
+
+[project.urls]
+Documentation = "https://jezhailwood.github.io/api-client"
+Repository = "https://github.com/jezhailwood/api-client"
+Issues = "https://github.com/jezhailwood/api-client/issues"
 
 [tool.ruff]
 line-length = 88
