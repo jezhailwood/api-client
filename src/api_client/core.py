@@ -9,6 +9,8 @@ from urllib.parse import urljoin
 
 import requests
 
+type QueryParams = dict[str, str | int | float | bool | None]
+
 
 class APIClient:
     """HTTP client for simple GET requests against a REST API.
@@ -81,7 +83,7 @@ class APIClient:
     def get(
         self,
         *path_segments: str | int,
-        params: dict[str, str | int] | None = None,
+        params: QueryParams | None = None,
         timeout: float | None = None,
     ) -> requests.Response:
         """Make a GET request and return the response.
