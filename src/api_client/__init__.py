@@ -3,8 +3,6 @@
 It provides a class that constructs URLs relative to a base endpoint, handles query
 parameters and returns `requests.Response` objects. Authentication and other
 session-level behaviour can be configured at construction time.
-
-See `api_client.client` for full usage details.
 """
 
 from .client import APIClient
