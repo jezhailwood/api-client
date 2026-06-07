@@ -87,27 +87,6 @@ class APIClient:
         self.timeout = timeout
         self._session = session if session is not None else requests.Session()
 
-    def _request(
-        self,
-        method: str,
-        *path_segments: str | int,
-        json: Any = None,
-        params: QueryParams | None = None,
-        timeout: float | None = None,
-    ) -> requests.Response:
-        """Build the URL, send the request and re-raise errors as `APIError`."""
-        path = "/".join(quote(str(p).strip("/"), safe="") for p in path_segments)
-        url = self.base_url + path
-        effective_timeout = self.timeout if timeout is None else timeout
-        try:
-            response = self._session.request(
-                method, url, json=json, params=params, timeout=effective_timeout
-            )
-            response.raise_for_status()
-            return response
-        except requests.RequestException as e:
-            raise APIError(str(e)) from e
-
     def get(
         self,
         *path_segments: str | int,
@@ -246,3 +225,24 @@ class APIClient:
             client.delete("users", 123)
         """
         return self._request("DELETE", *path_segments, params=params, timeout=timeout)
+
+    def _request(
+        self,
+        method: str,
+        *path_segments: str | int,
+        json: Any = None,
+        params: QueryParams | None = None,
+        timeout: float | None = None,
+    ) -> requests.Response:
+        """Build the URL, send the request and re-raise errors as `APIError`."""
+        path = "/".join(quote(str(p).strip("/"), safe="") for p in path_segments)
+        url = self.base_url + path
+        effective_timeout = self.timeout if timeout is None else timeout
+        try:
+            response = self._session.request(
+                method, url, json=json, params=params, timeout=effective_timeout
+            )
+            response.raise_for_status()
+            return response
+        except requests.RequestException as e:
+            raise APIError(str(e)) from e
