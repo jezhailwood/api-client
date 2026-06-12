@@ -7,6 +7,6 @@ session-level behaviour can be configured at construction time.
 """
 
 from .client import APIClient
-from .exceptions import APIError
+from .exceptions import APIError, HTTPStatusError, RequestError
 
-__all__ = ["APIClient", "APIError"]
+__all__ = ["APIClient", "APIError", "HTTPStatusError", "RequestError"]

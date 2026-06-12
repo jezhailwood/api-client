@@ -10,7 +10,7 @@ from urllib.parse import quote, urlsplit
 
 import requests
 
-from .exceptions import APIError
+from .exceptions import HTTPStatusError, RequestError
 
 type QueryParams = dict[str, str | int | float | bool | None]
 
@@ -26,8 +26,11 @@ class APIClient:
     set automatically.
 
     This client does not currently handle retries. Authentication and custom headers can
-    be configured by passing a pre-configured `requests.Session` instance. Network
-    errors and non-2xx responses are raised as `APIError`.
+    be configured by passing a pre-configured `requests.Session` instance.
+
+    A request that fails to obtain a response raises `RequestError`; a 4xx or 5xx status
+    code raises `HTTPStatusError`. Both derive from `APIError`, which can be caught to
+    handle either.
 
     Examples:
         Basic usage:
@@ -60,6 +63,15 @@ class APIClient:
             session = OAuth2Session("<client_id>", "<client_secret>")
             session.fetch_token("https://api.example.com/oauth/token")
             client = APIClient("https://api.example.com", session=session)
+
+        Error handling:
+
+            try:
+                response = client.get("users", 123)
+            except RequestError as e:
+                print(f"Could not reach the API: {e}")
+            except HTTPStatusError as e:
+                print(f"Request failed with {e.response.status_code}")
     """
 
     def __init__(
@@ -121,7 +133,8 @@ class APIClient:
             A `requests.Response` object.
 
         Raises:
-            APIError: If a network or HTTP error occurs.
+            RequestError: If the request fails to obtain a response.
+            HTTPStatusError: If the server returns a 4xx or 5xx status code.
 
         Examples:
             client.get("users")
@@ -149,7 +162,8 @@ class APIClient:
             A `requests.Response` object.
 
         Raises:
-            APIError: If a network or HTTP error occurs.
+            RequestError: If the request fails to obtain a response.
+            HTTPStatusError: If the server returns a 4xx or 5xx status code.
 
         Example:
             client.post("users", json={"name": "Ada"})
@@ -178,7 +192,8 @@ class APIClient:
             A `requests.Response` object.
 
         Raises:
-            APIError: If a network or HTTP error occurs.
+            RequestError: If the request fails to obtain a response.
+            HTTPStatusError: If the server returns a 4xx or 5xx status code.
 
         Example:
             client.put("users", 123, json={"name": "Ada", "email": "ada@example.com"})
@@ -207,7 +222,8 @@ class APIClient:
             A `requests.Response` object.
 
         Raises:
-            APIError: If a network or HTTP error occurs.
+            RequestError: If the request fails to obtain a response.
+            HTTPStatusError: If the server returns a 4xx or 5xx status code.
 
         Example:
             client.patch("users", 123, json={"email": "new@example.com"})
@@ -234,7 +250,8 @@ class APIClient:
             A `requests.Response` object.
 
         Raises:
-            APIError: If a network or HTTP error occurs.
+            RequestError: If the request fails to obtain a response.
+            HTTPStatusError: If the server returns a 4xx or 5xx status code.
 
         Example:
             client.delete("users", 123)
@@ -249,7 +266,7 @@ class APIClient:
         params: QueryParams | None = None,
         timeout: float | None = None,
     ) -> requests.Response:
-        """Build the URL, send the request and re-raise errors as `APIError`."""
+        """Build the URL, send the request and re-raise errors."""
         path = "/".join(quote(str(p).strip("/"), safe="") for p in path_segments)
         url = self.base_url + path
         effective_timeout = self.timeout if timeout is None else timeout
@@ -257,7 +274,10 @@ class APIClient:
             response = self._session.request(
                 method, url, json=json, params=params, timeout=effective_timeout
             )
-            response.raise_for_status()
-            return response
         except requests.RequestException as e:
-            raise APIError(str(e)) from e
+            raise RequestError(str(e)) from e
+        try:
+            response.raise_for_status()
+        except requests.HTTPError as e:
+            raise HTTPStatusError(str(e), response=response) from e
+        return response
