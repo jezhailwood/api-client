@@ -6,7 +6,7 @@ as `requests.Response` objects.
 """
 
 from typing import Any
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 import requests
 
@@ -82,8 +82,23 @@ class APIClient:
                 plain session is created. Pass a custom session to inject authentication
                 or other session-level behaviour. See the class-level examples for
                 common patterns.
+
+        Raises:
+            ValueError: If `base_url` lacks an http(s) scheme or a host, or contains a
+                query string or fragment.
         """
-        self.base_url = base_url.strip().rstrip("/") + "/"
+        base_url = base_url.strip()
+        parts = urlsplit(base_url)
+        if parts.scheme not in ("http", "https") or not parts.netloc:
+            raise ValueError(
+                f"base_url must include an http(s) scheme and a host, got {base_url!r}"
+            )
+        if parts.query or parts.fragment:
+            raise ValueError(
+                "base_url must not contain a query string or fragment, "
+                f"got {base_url!r}"
+            )
+        self.base_url = base_url.rstrip("/") + "/"
         self.timeout = timeout
         self._session = session if session is not None else requests.Session()
 
