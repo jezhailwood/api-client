@@ -53,8 +53,8 @@ client.delete("users", 123)
 
 When a request fails, the client raises one of two exceptions, both subclasses of `APIError`:
 
-- `RequestError` — the request never produced a usable response (the connection failed, the request timed out, the server redirected in a loop, and so on).
-- `HTTPStatusError` — the server responded, but with a 4xx or 5xx status code. The response is attached as `.response`, so you can inspect the status code, headers and body.
+- `RequestError` – the request did not produce a usable response (the connection failed, the request timed out, the server redirected in a loop, and so on).
+- `HTTPStatusError` – the server responded, but with a 4xx or 5xx status code. The response is attached as `.response`, so you can inspect the status code, headers and body.
 
 ```python
 from api_client import APIClient, HTTPStatusError, RequestError
