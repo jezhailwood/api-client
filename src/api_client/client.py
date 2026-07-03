@@ -135,10 +135,6 @@ class APIClient:
         Raises:
             RequestError: If the request fails to obtain a response.
             HTTPStatusError: If the server returns a 4xx or 5xx status code.
-
-        Examples:
-            client.get("users")
-            client.get("users", 123, params={"profile": "full"})
         """
         return self._request("GET", *path_segments, params=params, timeout=timeout)
 
@@ -164,9 +160,6 @@ class APIClient:
         Raises:
             RequestError: If the request fails to obtain a response.
             HTTPStatusError: If the server returns a 4xx or 5xx status code.
-
-        Example:
-            client.post("users", json={"name": "Ada"})
         """
         return self._request(
             "POST", *path_segments, json=json, params=params, timeout=timeout
@@ -194,9 +187,6 @@ class APIClient:
         Raises:
             RequestError: If the request fails to obtain a response.
             HTTPStatusError: If the server returns a 4xx or 5xx status code.
-
-        Example:
-            client.put("users", 123, json={"name": "Ada", "email": "ada@example.com"})
         """
         return self._request(
             "PUT", *path_segments, json=json, params=params, timeout=timeout
@@ -224,9 +214,6 @@ class APIClient:
         Raises:
             RequestError: If the request fails to obtain a response.
             HTTPStatusError: If the server returns a 4xx or 5xx status code.
-
-        Example:
-            client.patch("users", 123, json={"email": "new@example.com"})
         """
         return self._request(
             "PATCH", *path_segments, json=json, params=params, timeout=timeout
@@ -252,9 +239,6 @@ class APIClient:
         Raises:
             RequestError: If the request fails to obtain a response.
             HTTPStatusError: If the server returns a 4xx or 5xx status code.
-
-        Example:
-            client.delete("users", 123)
         """
         return self._request("DELETE", *path_segments, params=params, timeout=timeout)
 
